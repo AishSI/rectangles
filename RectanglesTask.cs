@@ -19,23 +19,22 @@ namespace Rectangles
 		// Площадь пересечения прямоугольников
 		public static int IntersectionSquare(Rectangle r1, Rectangle r2)
 		{
-			int sideA = 0;
-			int sideB = 0;
-			//int horizontalIntersection = GetIntersectionLength(r1, r2);
+			var horizontalIntersection = GetIntersectionLength(new Segment(r1.Left, r1.Right), new Segment(r2.Left, r2.Right));
+			var verticallIntersection = GetIntersectionLength(new Segment(r1.Top, r1.Bottom), new Segment(r2.Top, r2.Bottom));
 
 			if (!AreIntersected(r1, r2)) return 0;
+			return Math.Abs(horizontalIntersection * verticallIntersection);
+		}
 
-			if (r1.Left <= r2.Left && r1.Right <= r2.Right) sideA = (r1.Right - r2.Left);
-			else if (r1.Left <= r2.Left && r1.Right >= r2.Right) sideA = (r2.Right - r2.Left);
-			else if (r2.Left <= r1.Left && r2.Right >= r1.Right) sideA = (r1.Right - r1.Left);
-			else sideA = (r2.Right - r1.Left);
-
-			if (r1.Top <= r2.Top && r1.Bottom <= r2.Bottom) sideB = (r1.Bottom - r2.Top);
-			else if (r1.Top <= r2.Top && r1.Bottom >= r2.Bottom) sideB = (r2.Bottom - r2.Top);
-			else if (r2.Top <= r1.Top && r2.Bottom >= r1.Bottom) sideB = (r1.Bottom - r1.Top);
-			else sideB = (r2.Bottom - r1.Top);
-
-			return Math.Abs(sideA * sideB);
+		public static int GetIntersectionLength(Segment segment1, Segment segment2)
+		{
+			if (segment1.point1 <= segment2.point1 && segment1.point2 <= segment2.point2)
+				return (segment1.point2 - segment2.point1);
+			if (segment1.point1 <= segment2.point1 && segment1.point2 >= segment2.point2)
+				return (segment2.point2 - segment2.point1);
+			if (segment2.point1 <= segment1.point1 && segment2.point2 >= segment1.point2)
+				return (segment1.point2 - segment1.point1);
+			return (segment2.point2 - segment1.point1);
 		}
 
 		// Если один из прямоугольников целиком находится внутри другого — вернуть номер (с нуля) внутреннего.
@@ -48,6 +47,18 @@ namespace Rectangles
 			if (r2.IsInside(r1))
 				return 1;
 			return -1;
+		}
+	}
+
+	public class Segment
+	{
+		public int point1;
+		public int point2;
+
+		public Segment(int point1, int point2)
+		{
+			this.point1 = point1;
+			this.point2 = point2;
 		}
 	}
 
