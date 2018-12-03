@@ -17,8 +17,8 @@ namespace Rectangles
 		// Площадь пересечения прямоугольников
 		public static int IntersectionSquare(Rectangle r1, Rectangle r2)
 		{
-			var horizontalIntersection = (new Segment(r1.Left, r1.Right).GetIntersectionLength(new Segment(r2.Left, r2.Right)));
-			var verticallIntersection = (new Segment(r1.Top, r1.Bottom).GetIntersectionLength(new Segment(r2.Top, r2.Bottom)));
+			var horizontalIntersection = Segment.GetIntersectionLen(new Segment(r1.Left, r1.Right), (new Segment(r2.Left, r2.Right)));
+			var verticallIntersection = Segment.GetIntersectionLen(new Segment(r1.Top, r1.Bottom), (new Segment(r2.Top, r2.Bottom)));
 			return horizontalIntersection * verticallIntersection;
 		}
 
@@ -45,16 +45,13 @@ namespace Rectangles
 			this.Point1 = point1;
 			this.Point2 = point2;
 		}
-	}
 
-	public static class SegmentExtensions
-	{
-		public static int GetIntersectionLength(this Segment segment1, Segment segment2)
+		public static int GetIntersectionLen(Segment segment1, Segment segment2)
 		{
 			if (segment1.Point2 < segment2.Point1 || segment1.Point1 > segment2.Point2)
 				return 0;
 			int[] points = { segment1.Point1, segment1.Point2, segment2.Point1, segment2.Point2 };
-			Array.Sort(points); //можно было отсортировать циклом с Min - для соблюдения условия не использовать библиотечных методов, но не стал заморачиваться
+			Array.Sort(points);
 			return points[2] - points[1];
 		}
 	}
